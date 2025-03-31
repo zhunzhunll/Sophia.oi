@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业报名系统</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        body {
+            /* background-color: #f5f7fa; */
+            /* color: #333; */
+            line-height: 1.6;
+            /* padding: 20px; */
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            /* background-color: white; */
+            border-radius: 10px;
+            /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
+            /* padding: 30px; */
+        }
+		.container img {
+			padding-top: 20px;
+			padding-bottom: 15px;
+			width: 20%;
+		}
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+			background-color: #094488;
+        }
+        h1 {
+            color: white;
+            margin-bottom:5px;
+        }
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-box input {
+            padding: 10px 15px;
+            width: 60%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .search-box button {
+            padding: 10px 20px;
+            background-color: #094488;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+			width: 60%;
+        }
+        .departments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .department-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .department-card h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .majors-list {
+            display: none;
+        }
+        .major-item {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .major-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .major-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .progress-container {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            background-color: #3498db;
+            width: 77.78%; /* 35/45 ≈ 77.78% */
+            transition: width 0.5s ease;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 5px;
+			max-width: 600px;
+			border-radius: 5px;
+			max-height: 70vh;
+			display: flex;
+			flex-direction: column;
+            text-align: center;
+        }
+		.modal-header {
+		    margin-bottom: 15px;
+		}
+		.modal-body {
+		    overflow-y: auto;
+		    flex: 1;
+		    padding: 10px 0;
+		}
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+			<img src="img/logo.png"/>
+            <h1>广州工商学院专业剩余名额统计系统</h1>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="输入专业名称查询剩余名额情况">
+        </div>
+		
+		<div class="search-box">
+		    <button onclick="searchMajor()">查询</button>
+		</div>
+
+        <!-- 搜索结果模态框 -->
+        <div id="searchModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-header">
+                    <h3 id="searchResultTitle">查询结果</h3>
+                </div>
+                <div class="modal-body" id="searchResultContent">
+                    <!-- 搜索结果将在这里显示 -->
+                </div>
+            </div>
+        </div>
+		
+		<div style="text-align: center;">
+			<p style="color: crimson;">注：招生专业剩余名额查询结果仅供参考，实际数据以学校最终统计为主</p>
+			<p>最终解释权归广州工商学院所有</p>
+		</div>
+		
+		
+    </div>
+
+    <script>
+        // 专业数据
+        const majorsData = {
+            "计算机广告制作": { remaining: 4 },
+			"计算机广告制作(视觉传达设计专本直通)": { remaining: 3 },
+			"计算机广告制作(升学特色班)": { remaining: 3 },
+			"计算机广告制作(文化创意方向)": { remaining: 5 },
+			"计算机动画制作": { remaining: 3 },
+			"计算机动画制作(短视频制作技术方向)": { remaining: 4 },
+            "室内设计": { remaining: 4 },
+			"室内设计(预备技师专本直通)": { remaining: 3 },
+			"室内设计(升学特色班)": { remaining: 3 },
+			"室内设计(唐明汉校企合作定向班)": { remaining: 5 },
+			"室内设计(智能家居方向)": { remaining: 5 },
+			"幼儿教育": { remaining: 5 },
+			"幼儿教育(专本直通)": { remaining: 3 },
+			"幼儿教育(国际双语方向)": { remaining: 5 },
+			"幼儿教育(音乐表演方向)": { remaining: 0 },
+			"播音与主持": { remaining: 4 },
+			"工商企业管理": { remaining: 4 },
+			"工商企业管理(专本直通)": { remaining: 3 },
+			"工商企业管理(升学特色班)": { remaining: 3 },
+			"工商企业管理(创业管理方向)": { remaining: 5 },
+            "工商企业管理(国际经济与贸易方向)": { remaining: 4 },
+			"工商企业管理(城际轨道管理方向)": { remaining: 4 },
+			"工商企业管理(旅游酒店管理方向)": { remaining: 5 },
+			"工商企业管理(人力资源管理专本直通)": { remaining: 3 },
+			"市场营销": { remaining: 4 },
+			"市场营销(升学特色班)": { remaining: 3 },
+            "市场营销(大数据营销方向)": { remaining: 5 },
+			"休闲体育服务": { remaining: 3 },
+			"法律事务(警务方向)": { remaining: 3 },
+			"计算机网络应用": { remaining: 4 },
+			"计算机网络应用(升学特色班)": { remaining: 3 },
+			"计算机网络应用(中国高科集团合作班)": { remaining: 5 },
+            "计算机网络应用(网络工程师方向)": { remaining: 3 },
+			"计算机网络应用(移动互联网前端开发方向)": { remaining: 4 },
+			"物联网应用技术(中国高科集团合作班)": { remaining: 5 },
+			"物联网应用技术(人工智能方向)": { remaining: 3 },
+            "物联网应用技术(5G通信应用方向)": { remaining: 3 },
+			"物联网应用技术(嵌入式开发方向)": { remaining: 3 },
+			"大数据应用技术": { remaining: 4 },
+			"大数据应用技术(中国高科集团合作班)": { remaining: 5 },
+			"大数据应用技术(云计算方向)": { remaining: 4 },
+            "会计": { remaining: 3 },
+			"会计(升学特色班)": { remaining: 3 },
+            "会计(财务管理方向)": { remaining: 5 },
+			"金融管理与务实": { remaining: 5 },
+			"金融管理与务实(专本直通)": { remaining: 3 },
+            "金融管理与务实(投资与理财方向)": { remaining: 5 },
+			"商务外语": { remaining: 4 },
+			"商务外语(专本直通)": { remaining: 3 },
+			"商务外语(升学特色班)": { remaining: 3 },
+			"电子商务": { remaining: 3 },
+			"电子商务(预备技师专本直通)": { remaining: 3 },
+			"电子商务(升学特色班)": { remaining: 3 },
+			"电子商务(中国高科集团合作班)": { remaining: 5 },
+			"电子商务(跨境电商方向)": { remaining: 3 },
+			"电子商务(新媒体运营方向)": { remaining: 4 },
+			"电子商务(新零售方向)": { remaining: 4 },
+			"电子商务(电子竞技运动服务与管理方向)": { remaining: 5 },
+			"工程造价": { remaining: 4 },
+			"工程造价(建筑工程管理方向)": { remaining: 4 },
+			"工业机器人应用与维护": { remaining: 3 },
+			"机电一体化": { remaining: 3 },
+			"汽车检测与维修": { remaining: 3 },
+            "新能源汽车检测与维修": { remaining: 8 },
+			"无人机应用技术": { remaining: 3 },
+			"口腔义齿制造(数字化口腔技术方向)": { remaining: 3 },
+            "护理": { remaining: 3 },
+			"中药营养保健": { remaining: 4 },
+        };
+
+        // 显示特定院系的专业列表
+        function showMajors(department) {
+            document.getElementById('department-view').style.display = 'none';
+            document.getElementById(department + '-majors').style.display = 'block';
+        }
+
+        // 返回院系列表
+        function backToDepartments() {
+            document.getElementById('department-view').style.display = 'block';
+            document.querySelectorAll('.majors-list').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        // 搜索专业
+        function searchMajor() {
+            const input = document.getElementById('searchInput').value.trim();
+            if (!input) {
+                alert('请输入专业名称');
+                return;
+            }
+        
+            let foundMajors = [];
+            for (const [major, data] of Object.entries(majorsData)) {
+                if (major.includes(input)) {
+                    foundMajors.push({major, data});
+                }
+            }
+        
+            if (foundMajors.length > 0) {
+                document.getElementById('searchResultTitle').innerHTML = 
+                    `<div style="margin-top: 30px;">专业剩余名额查询结果如下:</br><span style="color: red;">共找到${foundMajors.length}个相关专业</span>`;
+                
+                let resultHTML = `
+                    <div style="margin-top: 25px;">
+                `;
+                
+                foundMajors.forEach(item => {
+                    resultHTML += `
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                            <p><strong>专业名称：${item.major}</strong></p>
+                            <p><strong>剩余名额：${item.data.remaining}个</strong></p>
+                        </div>
+                    `;
+                });
+                
+                resultHTML += `</div>`;
+                
+                document.getElementById('searchResultContent').innerHTML = resultHTML;
+                document.getElementById('searchModal').style.display = 'block';
+            } else {
+                document.getElementById('searchResultTitle').innerHTML = 
+                    `<span style="color: red;">未找到</span>`;
+                document.getElementById('searchResultContent').textContent = '未找到匹配的专业，请检查输入是否正确';
+                document.getElementById('searchModal').style.display = 'block';
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('searchModal').style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('searchModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 回车键搜索
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMajor();
+            }
+        });
+    </script>
+</body>
+</html>
