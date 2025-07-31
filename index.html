@@ -12,22 +12,29 @@
             font-family: 'Microsoft YaHei', Arial, sans-serif;
         }
         body {
+            /* background-color: #f5f7fa; */
+            /* color: #333; */
             line-height: 1.6;
+            /* padding: 20px; */
         }
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            /* background-color: white; */
+            border-radius: 10px;
+            /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
+            /* padding: 30px; */
         }
-        .container img {
-            padding-top: 20px;
-            padding-bottom: 15px;
-            width: 20%;
-        }
+		.container img {
+			padding-top: 20px;
+			padding-bottom: 15px;
+			width: 20%;
+		}
         header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            background-color: #094488;
+			background-color: #094488;
         }
         h1 {
             color: white;
@@ -52,7 +59,7 @@
             border-radius: 5px;
             cursor: pointer;
             margin-left: 10px;
-            width: 60%;
+			width: 60%;
         }
         .departments {
             display: grid;
@@ -152,21 +159,21 @@
             border: 1px solid #888;
             width: 80%;
             border-radius: 5px;
-            max-width: 600px;
-            border-radius: 5px;
-            max-height: 70vh;
-            display: flex;
-            flex-direction: column;
+			max-width: 600px;
+			border-radius: 5px;
+			max-height: 70vh;
+			display: flex;
+			flex-direction: column;
             text-align: center;
         }
-        .modal-header {
-            margin-bottom: 15px;
-        }
-        .modal-body {
-            overflow-y: auto;
-            flex: 1;
-            padding: 10px 0;
-        }
+		.modal-header {
+		    margin-bottom: 15px;
+		}
+		.modal-body {
+		    overflow-y: auto;
+		    flex: 1;
+		    padding: 10px 0;
+		}
         .close {
             color: #aaa;
             float: right;
@@ -177,107 +184,22 @@
         .close:hover {
             color: black;
         }
-        /* 管理员按钮样式 */
-        .admin-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        /* 管理员面板样式 */
-        .admin-panel {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            z-index: 1001;
-            width: 80%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .admin-panel h2 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-            text-align: center;
-        }
-        .major-edit-item {
-            display: flex;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            align-items: center;
-        }
-        .major-edit-item input {
-            flex: 1;
-            padding: 8px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .major-edit-item button {
-            padding: 8px 12px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .major-edit-item button.save-btn {
-            background-color: #2ecc71;
-            margin-right: 5px;
-        }
-        .admin-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .admin-controls button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .add-major-btn {
-            background-color: #3498db;
-            color: white;
-        }
-        .close-admin-btn {
-            background-color: #95a5a6;
-            color: white;
-        }
-        .save-all-btn {
-            background-color: #2ecc71;
-            color: white;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <img src="img/logo.png"/>
+			<img src="img/logo.png"/>
             <h1>广州工商学院专业剩余名额统计系统</h1>
         </header>
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="输入完整专业名称查询剩余名额情况">
+            <input type="text" id="searchInput" placeholder="输入专业名称查询剩余名额情况">
         </div>
-        
-        <div class="search-box">
-            <button onclick="searchMajor()">查询</button>
-        </div>
+		
+		<div class="search-box">
+		    <button onclick="searchMajor()">查询</button>
+		</div>
 
         <!-- 搜索结果模态框 -->
         <div id="searchModal" class="modal" style="padding-top: 80px;">
@@ -291,102 +213,86 @@
                 </div>
             </div>
         </div>
-        
-        <div style="text-align: center;">
-            <p style="color: crimson;">注：招生专业剩余名额查询结果仅供参考，实际数据以学校最终统计为主</p>
-            <p>最终解释权归广州工商学院所有</p>
-        </div>
-        
-        <!-- 管理员按钮 -->
-        <button class="admin-btn" onclick="toggleAdminPanel()">管理员</button>
-        
-        <!-- 管理员面板 -->
-        <div id="adminPanel" class="admin-panel">
-            <h2>专业名额管理</h2>
-            <div id="majorEditList">
-                <!-- 专业编辑列表将在这里动态生成 -->
-            </div>
-            <div class="admin-controls">
-                <button class="add-major-btn" onclick="addNewMajor()">添加新专业</button>
-                <div>
-                    <button class="save-all-btn" onclick="saveAllChanges()">保存所有更改</button>
-                    <button class="close-admin-btn" onclick="toggleAdminPanel()">关闭</button>
-                </div>
-            </div>
-        </div>
+		
+		<div style="text-align: center;">
+			<p style="color: crimson;">注：招生专业剩余名额查询结果仅供参考，实际数据以学校最终统计为主</p>
+			<p>最终解释权归广州工商学院所有</p>
+		</div>
+		
+		
     </div>
 
     <script>
         // 专业数据
-        let majorsData = {
+        const majorsData = {
             "计算机广告制作": { remaining: 4 },
-            "计算机广告制作(视觉传达设计专本直通)": { remaining: 3 },
-            "计算机广告制作(升学特色班)": { remaining: 3 },
-            "计算机广告制作(文化创意方向)": { remaining: 5 },
-            "计算机动画制作": { remaining: 3 },
-            "计算机动画制作(短视频制作技术方向)": { remaining: 4 },
+			"计算机广告制作(视觉传达设计专本直通)": { remaining: 3 },
+			"计算机广告制作(升学特色班)": { remaining: 3 },
+			"计算机广告制作(文化创意方向)": { remaining: 5 },
+			"计算机动画制作": { remaining: 3 },
+			"计算机动画制作(短视频制作技术方向)": { remaining: 4 },
             "室内设计": { remaining: 4 },
-            "室内设计(预备技师专本直通)": { remaining: 3 },
-            "室内设计(升学特色班)": { remaining: 3 },
-            "室内设计(唐明汉校企合作定向班)": { remaining: 5 },
-            "室内设计(智能家居方向)": { remaining: 5 },
-            "幼儿教育": { remaining: 5 },
-            "幼儿教育(专本直通)": { remaining: 3 },
-            "幼儿教育(国际双语方向)": { remaining: 5 },
-            "幼儿教育(音乐表演方向)": { remaining: 0 },
-            "播音与主持": { remaining: 4 },
-            "工商企业管理": { remaining: 4 },
-            "工商企业管理(专本直通)": { remaining: 3 },
-            "工商企业管理(升学特色班)": { remaining: 3 },
-            "工商企业管理(创业管理方向)": { remaining: 5 },
+			"室内设计(预备技师专本直通)": { remaining: 3 },
+			"室内设计(升学特色班)": { remaining: 3 },
+			"室内设计(唐明汉校企合作定向班)": { remaining: 5 },
+			"室内设计(智能家居方向)": { remaining: 5 },
+			"幼儿教育": { remaining: 5 },
+			"幼儿教育(专本直通)": { remaining: 3 },
+			"幼儿教育(国际双语方向)": { remaining: 5 },
+			"幼儿教育(音乐表演方向)": { remaining: 0 },
+			"播音与主持": { remaining: 4 },
+			"工商企业管理": { remaining: 4 },
+			"工商企业管理(专本直通)": { remaining: 3 },
+			"工商企业管理(升学特色班)": { remaining: 3 },
+			"工商企业管理(创业管理方向)": { remaining: 5 },
             "工商企业管理(国际经济与贸易方向)": { remaining: 4 },
-            "工商企业管理(城际轨道管理方向)": { remaining: 4 },
-            "工商企业管理(旅游酒店管理方向)": { remaining: 5 },
-            "工商企业管理(人力资源管理专本直通)": { remaining: 3 },
-            "市场营销": { remaining: 4 },
-            "市场营销(升学特色班)": { remaining: 3 },
+			"工商企业管理(城际轨道管理方向)": { remaining: 4 },
+			"工商企业管理(旅游酒店管理方向)": { remaining: 5 },
+			"工商企业管理(人力资源管理专本直通)": { remaining: 3 },
+			"市场营销": { remaining: 4 },
+			"市场营销(升学特色班)": { remaining: 3 },
             "市场营销(大数据营销方向)": { remaining: 5 },
-            "休闲体育服务": { remaining: 3 },
-            "法律事务(警务方向)": { remaining: 3 },
-            "计算机网络应用": { remaining: 4 },
-            "计算机网络应用(升学特色班)": { remaining: 3 },
-            "计算机网络应用(中国高科集团合作班)": { remaining: 5 },
+			"休闲体育服务": { remaining: 3 },
+			"法律事务(警务方向)": { remaining: 3 },
+			"计算机网络应用": { remaining: 4 },
+			"计算机网络应用(升学特色班)": { remaining: 3 },
+			"计算机网络应用(中国高科集团合作班)": { remaining: 5 },
             "计算机网络应用(网络工程师方向)": { remaining: 3 },
-            "计算机网络应用(移动互联网前端开发方向)": { remaining: 4 },
-            "物联网应用技术(中国高科集团合作班)": { remaining: 5 },
-            "物联网应用技术(人工智能方向)": { remaining: 3 },
+			"计算机网络应用(移动互联网前端开发方向)": { remaining: 4 },
+			"物联网应用技术(中国高科集团合作班)": { remaining: 5 },
+			"物联网应用技术(人工智能方向)": { remaining: 3 },
             "物联网应用技术(5G通信应用方向)": { remaining: 3 },
-            "物联网应用技术(嵌入式开发方向)": { remaining: 3 },
-            "大数据应用技术": { remaining: 4 },
-            "大数据应用技术(中国高科集团合作班)": { remaining: 5 },
-            "大数据应用技术(云计算方向)": { remaining: 4 },
+			"物联网应用技术(嵌入式开发方向)": { remaining: 3 },
+			"大数据应用技术": { remaining: 4 },
+			"大数据应用技术(中国高科集团合作班)": { remaining: 5 },
+			"大数据应用技术(云计算方向)": { remaining: 4 },
             "会计": { remaining: 3 },
-            "会计(升学特色班)": { remaining: 3 },
+			"会计(升学特色班)": { remaining: 3 },
             "会计(财务管理方向)": { remaining: 5 },
-            "金融管理与务实": { remaining: 5 },
-            "金融管理与务实(专本直通)": { remaining: 3 },
+			"金融管理与务实": { remaining: 5 },
+			"金融管理与务实(专本直通)": { remaining: 3 },
             "金融管理与务实(投资与理财方向)": { remaining: 5 },
-            "商务外语": { remaining: 4 },
-            "商务外语(专本直通)": { remaining: 3 },
-            "商务外语(升学特色班)": { remaining: 3 },
-            "电子商务": { remaining: 3 },
-            "电子商务(预备技师专本直通)": { remaining: 3 },
-            "电子商务(升学特色班)": { remaining: 2 },
-            "电子商务(中国高科集团合作班)": { remaining: 5 },
-            "电子商务(跨境电商方向)": { remaining: 4 },
-            "电子商务(新媒体运营方向)": { remaining: 3 },
-            "电子商务(新零售方向)": { remaining: 5 },
-            "电子商务(电子竞技运动服务与管理方向)": { remaining: 5 },
-            "工程造价": { remaining: 4 },
-            "工程造价(建筑工程管理方向)": { remaining: 4 },
-            "工业机器人应用与维护": { remaining: 3 },
-            "机电一体化": { remaining: 3 },
-            "汽车检测与维修": { remaining: 3 },
+			"商务外语": { remaining: 4 },
+			"商务外语(专本直通)": { remaining: 3 },
+			"商务外语(升学特色班)": { remaining: 3 },
+			"电子商务": { remaining: 3 },
+			"电子商务(预备技师专本直通)": { remaining: 3 },
+			"电子商务(升学特色班)": { remaining: 2 },
+			"电子商务(中国高科集团合作班)": { remaining: 5 },
+			"电子商务(跨境电商方向)": { remaining: 4 },
+			"电子商务(新媒体运营方向)": { remaining: 3 },
+			"电子商务(新零售方向)": { remaining: 5 },
+			"电子商务(电子竞技运动服务与管理方向)": { remaining: 5 },
+			"工程造价": { remaining: 4 },
+			"工程造价(建筑工程管理方向)": { remaining: 4 },
+			"工业机器人应用与维护": { remaining: 3 },
+			"机电一体化": { remaining: 3 },
+			"汽车检测与维修": { remaining: 3 },
             "新能源汽车检测与维修": { remaining: 8 },
-            "无人机应用技术": { remaining: 3 },
-            "口腔义齿制造(数字化口腔技术方向)": { remaining: 3 },
+			"无人机应用技术": { remaining: 3 },
+			"口腔义齿制造(数字化口腔技术方向)": { remaining: 3 },
             "护理": { remaining: 3 },
-            "中药营养保健": { remaining: 4 },
+			"中药营养保健": { remaining: 4 },
         };
 
         // 显示特定院系的专业列表
@@ -403,7 +309,7 @@
             });
         }
 
-        // 搜索专业 - 修改为精确匹配
+        // 搜索专业
         function searchMajor() {
             const input = document.getElementById('searchInput').value.trim();
             if (!input) {
@@ -411,28 +317,38 @@
                 return;
             }
         
-            // 查找完全匹配的专业
-            const exactMatch = majorsData[input];
+            let foundMajors = [];
+            for (const [major, data] of Object.entries(majorsData)) {
+                if (major.includes(input)) {
+                    foundMajors.push({major, data});
+                }
+            }
         
-            if (exactMatch) {
+            if (foundMajors.length > 0) {
                 document.getElementById('searchResultTitle').innerHTML = 
-                    `<div style="margin-top: 30px;">专业剩余名额查询结果</div>`;
+                    `<div style="margin-top: 30px;">专业剩余名额查询结果如下:</br><span style="color: red;">共找到${foundMajors.length}个相关专业</span>`;
                 
                 let resultHTML = `
                     <div style="margin-top: 25px;">
-                        <div style="margin-bottom: 15px; padding-bottom: 15px;">
-                            <p><strong>专业名称：${input}</strong></p>
-                            <p><strong>剩余名额：${exactMatch.remaining}个</strong></p>
-                        </div>
-                    </div>
                 `;
+                
+                foundMajors.forEach(item => {
+                    resultHTML += `
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                            <p><strong>专业名称：${item.major}</strong></p>
+                            <p><strong>剩余名额：${item.data.remaining}个</strong></p>
+                        </div>
+                    `;
+                });
+                
+                resultHTML += `</div>`;
                 
                 document.getElementById('searchResultContent').innerHTML = resultHTML;
                 document.getElementById('searchModal').style.display = 'block';
             } else {
                 document.getElementById('searchResultTitle').innerHTML = 
                     `<span style="color: red;">未找到</span>`;
-                document.getElementById('searchResultContent').textContent = '未找到匹配的专业，请检查输入是否正确（需输入完整专业名称）';
+                document.getElementById('searchResultContent').textContent = '未找到匹配的专业，请检查输入是否正确';
                 document.getElementById('searchModal').style.display = 'block';
             }
         }
@@ -445,12 +361,8 @@
         // 点击模态框外部关闭
         window.onclick = function(event) {
             const modal = document.getElementById('searchModal');
-            const adminPanel = document.getElementById('adminPanel');
             if (event.target == modal) {
                 modal.style.display = 'none';
-            }
-            if (event.target == adminPanel) {
-                // 不处理，防止点击面板内部时关闭
             }
         }
 
@@ -460,122 +372,6 @@
                 searchMajor();
             }
         });
-
-        // 管理员功能
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-                renderMajorEditList();
-            }
-        }
-
-        // 渲染专业编辑列表
-        function renderMajorEditList() {
-            const container = document.getElementById('majorEditList');
-            container.innerHTML = '';
-            
-            Object.entries(majorsData).forEach(([major, data], index) => {
-                const item = document.createElement('div');
-                item.className = 'major-edit-item';
-                item.innerHTML = `
-                    <input type="text" value="${major}" class="major-name-input" data-index="${index}">
-                    <input type="number" value="${data.remaining}" class="major-remaining-input" data-index="${index}">
-                    <button class="save-btn" onclick="saveSingleMajor(${index})">保存</button>
-                    <button onclick="removeMajor(${index})">删除</button>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        // 保存单个专业修改
-        function saveSingleMajor(index) {
-            const majorInputs = document.querySelectorAll('.major-name-input');
-            const remainingInputs = document.querySelectorAll('.major-remaining-input');
-            
-            const oldMajor = Object.keys(majorsData)[index];
-            const newMajor = majorInputs[index].value.trim();
-            const newRemaining = parseInt(remainingInputs[index].value);
-            
-            if (!newMajor) {
-                alert('专业名称不能为空');
-                return;
-            }
-            
-            if (isNaN(newRemaining) || newRemaining < 0) {
-                alert('剩余名额必须是非负整数');
-                return;
-            }
-            
-            // 如果专业名称改变了，需要先删除旧的再添加新的
-            if (oldMajor !== newMajor) {
-                delete majorsData[oldMajor];
-            }
-            
-            majorsData[newMajor] = { remaining: newRemaining };
-            
-            alert('修改已保存');
-        }
-
-        // 删除专业
-        function removeMajor(index) {
-            const major = Object.keys(majorsData)[index];
-            if (confirm(`确定要删除专业 "${major}" 吗？`)) {
-                delete majorsData[major];
-                renderMajorEditList();
-            }
-        }
-
-        // 添加新专业
-        function addNewMajor() {
-            const container = document.getElementById('majorEditList');
-            const newIndex = Object.keys(majorsData).length;
-            
-            const item = document.createElement('div');
-            item.className = 'major-edit-item';
-            item.innerHTML = `
-                <input type="text" placeholder="输入专业名称" class="major-name-input" data-index="${newIndex}">
-                <input type="number" placeholder="剩余名额" class="major-remaining-input" data-index="${newIndex}">
-                <button class="save-btn" onclick="saveSingleMajor(${newIndex})">保存</button>
-                <button onclick="removeMajor(${newIndex})">删除</button>
-            `;
-            container.appendChild(item);
-        }
-
-        // 保存所有更改
-        function saveAllChanges() {
-            const majorInputs = document.querySelectorAll('.major-name-input');
-            const remainingInputs = document.querySelectorAll('.major-remaining-input');
-            
-            const newMajorsData = {};
-            let hasError = false;
-            
-            for (let i = 0; i < majorInputs.length; i++) {
-                const major = majorInputs[i].value.trim();
-                const remaining = parseInt(remainingInputs[i].value);
-                
-                if (!major) {
-                    alert(`第 ${i + 1} 行的专业名称不能为空`);
-                    hasError = true;
-                    break;
-                }
-                
-                if (isNaN(remaining) || remaining < 0) {
-                    alert(`第 ${i + 1} 行的剩余名额必须是非负整数`);
-                    hasError = true;
-                    break;
-                }
-                
-                newMajorsData[major] = { remaining };
-            }
-            
-            if (!hasError) {
-                majorsData = newMajorsData;
-                alert('所有更改已保存');
-            }
-        }
     </script>
 </body>
 </html>
